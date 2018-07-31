@@ -1,19 +1,19 @@
 #pragma once
 #ifndef ClassMap
-#define WIDTH 40
-#define HIGH 20
+#include "GameSetUp.h"
 
 class Map
 {
 private:
 	char wallSign;
+	void BuildHorizontalBorder();
 public:	
 	Map()
 	{
 		wallSign = char(219);
 	}
-	~Map() {}
 	void BuildingMap();
+	void Reset();
 };
 
 #endif // !ClassMap
