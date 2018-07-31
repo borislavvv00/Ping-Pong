@@ -1,126 +1,124 @@
 #pragma once
 #ifndef GameRules
-#include "MapFunctions.h"
-#include "GameMovement.h"
+#include "ClassMap.h"
+#include "ClassBall.h"
+#include "ClassPlatform.h"
 
-void Ball::BallTouchingPlayerPlatform()
+void Ball::TouchingPlayerPlatform()
 {
-	if (ballX == playerPlatformX + 2 && ballY == playerPlatformY - 1)
+	if (ball.y == playerPlatform.y - 1)
 	{
-		ballMove = BallMovement::up;
 		ballTrajectory = 1;
-	}
-	else if ((ballX == playerPlatformX || ballX == playerPlatformX + 1) && ballY == playerPlatformY - 1)
-	{
-		ballMove = BallMovement::upLeft;
-		ballTrajectory = 1;
-	}
-	else if ((ballX == playerPlatformX + 3 || ballX == playerPlatformX + 4) && ballY == playerPlatformY - 1)
-	{
-		ballMove = BallMovement::upRigth;
-		ballTrajectory = 1;
+		if (ball.x == playerPlatform.x + 2)
+		{
+			ballDirection = BallDirection::up;
+		}
+		else if (ball.x == playerPlatform.x || ball.x == playerPlatform.x + 1)
+		{
+			ballDirection = BallDirection::upLeft;
+		}
+		else if (ball.x == playerPlatform.x + 3 || ball.x == playerPlatform.x + 4)
+		{
+			ballDirection = BallDirection::upRigth;
+		}
 	}
 }
 
-void Ball::BallTouchingEnemyPlatform()
+void Ball::TouchingEnemyPlatform()
 {
-	if (ballX == enemyPlatformX + 2 && ballY == enemyPlatformY + 1)
+	if (ball.y == enemyPlatform.y + 1)
 	{
-		ballMove = BallMovement::down;
 		ballTrajectory = 0;
-	}
-	else if ((ballX == enemyPlatformX || ballX == enemyPlatformX + 1) && ballY == enemyPlatformY + 1)
-	{
-		ballMove = BallMovement::downLeft;
-		ballTrajectory = 0;
-	}
-	else if ((ballX == enemyPlatformX + 3 || ballX == enemyPlatformX + 4) && ballY == enemyPlatformY + 1)
-	{
-		ballMove = BallMovement::downRigth;
-		ballTrajectory = 0;
+		if (ball.x == enemyPlatform.x + 2)
+		{
+			ballDirection = BallDirection::down;
+		}
+		else if (ball.x == enemyPlatform.x || ball.x == enemyPlatform.x + 1)
+		{
+			ballDirection = BallDirection::downLeft;
+		}
+		else if (ball.x == enemyPlatform.x + 3 || ball.x == enemyPlatform.x + 4)
+		{
+			ballDirection = BallDirection::downRigth;
+		}
 	}
 }
 
-void Ball::BallTouchingTheWall()
+void Ball::ChooseDirection(int dir1, int dir2)
+{
+	if (ball.x == 1)
+	{
+		ballDirection = BallDirection(dir1);
+	}
+	else if (ball.x == WIDTH - 1)
+	{
+		ballDirection = BallDirection(dir2);
+	}
+}
+
+void Ball::TouchingTheWall()
 {
 	switch (ballTrajectory)
 	{
 	case 0:
-		if (ballX == 0)
-		{
-			ballMove = BallMovement::upRigth;
-		}
-		else if (ballX == WIDTH)
-		{
-			ballMove = BallMovement::upLeft;
-		}
+		ChooseDirection(2, 4);
 		break;
 	case 1:
-		if (ballX == 0)
-		{
-			ballMove = BallMovement::downRigth;
-		}
-		else if (ballX == WIDTH)
-		{
-			ballMove = BallMovement::downLeft;
-		}
+		ChooseDirection(5, 3);
 		break;
 	}
 }
 
-void Ball::BallReset()
+void Ball::SetCoordinates()
 {
-	if (ballY == 0)
-	{
-		ballY = HIGH / 2;
-		ballX = WIDTH / 2;
-		ballMove = BallMovement::down;
-		playerScore++;
-	}
-	else if (ballY == HIGH)
-	{
-		ballY = HIGH / 2;
-		ballX = WIDTH / 2;
-		ballMove = BallMovement::down;
-		enemyScore++;
-	}
-	if (enemyScore == 5)
-	{
-		gameOver = true;
-	}
+	ball.y = HIGH / 2;
+	ball.x = WIDTH / 2;
+	ballDirection = BallDirection::down;
 }
 //Ball functions
 //----------------------------------------------------------------------------------
 //Platform functions
-void Platform::EnemyPlatformMoving()
+void Platform::EnemyPlatformMoveLogic()
 {
-	if (enemyPlatformX < ballX)
+	if (x < ball.x)
 	{
-		enemyPlatformMove = PlatformMovement::right;
+		enemyDirection = PlatformDirection::right;
 	}
 	else
 	{
-		enemyPlatformMove = PlatformMovement::left;
+		enemyDirection = PlatformDirection::left;
 	}
 }
 
-void Platform::PlatformTouchingTheWall()
+void Platform::TouchingTheWall(PlatformDirection &dir)
 {
-	if (playerPlatformX == 0)
+	if (x == 1)
 	{
-		playerPlatformX++;
+		dir = PlatformDirection::right;
 	}
-	else  if (playerPlatformX == WIDTH - 1)
+	else  if (x == WIDTH - (platformWidth + 1))
 	{
-		playerPlatformX--;
+		dir = PlatformDirection::left;
 	}
-	else if (enemyPlatformX == 0)
+}
+//Platform functions
+//---------------------------------------------------------------------------
+//Map functions
+void Map::Reset()
+{
+	if (ball.y == 0)
 	{
-		enemyPlatformMove = PlatformMovement::right;
+		playerPlatform.score++;
+		playerPlatform.SetCoordinates(WIDTH / 2 - 2, HIGH - 3, playerDirection);
+		enemyPlatform.SetCoordinates(WIDTH / 2 - 2, 3, enemyDirection);
+		ball.SetCoordinates();
 	}
-	else  if (enemyPlatformX == WIDTH - 1)
+	else if (ball.y == HIGH)
 	{
-		enemyPlatformMove = PlatformMovement::left;
+		enemyPlatform.score++;
+		playerPlatform.SetCoordinates(WIDTH / 2 - 2, HIGH - 3, playerDirection);
+		enemyPlatform.SetCoordinates(WIDTH / 2 - 2, 3, enemyDirection);
+		ball.SetCoordinates();
 	}
 }
 
