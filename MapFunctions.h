@@ -1,17 +1,22 @@
 #pragma once
 #ifndef MapFunctions
-#include <iostream>
-#include "GameSetUp.h"
+#include "ClassMap.h"
+#include "ClassBall.h"
+#include "ClassPlatform.h"
+#include "PlatformFunctions.h"
 
-using namespace std;
-
-void Map::BuildingMap()
+void Map::BuildHorizontalBorder()
 {
 	for (int i = 0; i < WIDTH; i++)
 	{
-		cout << wallSign;			//up border
+		cout << wallSign;	
 	}
 	cout << endl;
+}
+
+void Map::BuildingMap()
+{
+	BuildHorizontalBorder();//up border
 	//----------------------------------------------
 	for (int i = 0; i < HIGH; i++)
 	{
@@ -22,21 +27,21 @@ void Map::BuildingMap()
 				cout << wallSign;   //left and rigth borders
 			}
 			//---------------------------------------------------------------
-			else if (i == playerPlatformY && j == playerPlatformX)
+			else if (i == playerPlatform.y && j == playerPlatform.x)
 			{
 				playerPlatform.BuildingPlatform(10); //player platform position
 			}
-			else if (i == enemyPlatformY && j == enemyPlatformX)
+			else if (i == enemyPlatform.y && j == enemyPlatform.x)
 			{
 				enemyPlatform.BuildingPlatform(12); //enemy platform position
 			}
-			else if (i == ballY && j == ballX)
+			else if (i == ball.y && j == ball.x)
 			{
 				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14);
 				cout << ball.ballSign;											//ball position
 				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
 			}
-			else if ((i == playerPlatformY || i == enemyPlatformY) && (j >= WIDTH / 2 - 2 && j <= WIDTH / 2 + 2))
+			else if ((i == playerPlatform.y || i == enemyPlatform.y) && (j >= playerPlatform.x && j <= playerPlatform.x + playerPlatform.platformWidth - 1))
 			{
 				continue; //remove redundant spaces
 			}
@@ -48,12 +53,9 @@ void Map::BuildingMap()
 		cout << endl;
 	}
 	//----------------------------------------
-	for (int i = 0; i < WIDTH; i++)
-	{
-		cout << wallSign;			//down border
-	}
-	cout << endl;
-	cout << "Player score: " << playerScore << "		Enemy score: " << enemyScore << endl;
+	BuildHorizontalBorder();//down border
+
+	cout << "Player score: " << playerPlatform.score << "		Enemy score: " << enemyPlatform.score << endl;
 }
 
 #endif // !MapFunctions
