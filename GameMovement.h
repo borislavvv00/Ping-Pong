@@ -1,75 +1,62 @@
 #pragma once
 #ifndef GameMovement
-#include <conio.h>
-#include "MapFunctions.h"
+#include "ClassBall.h"
+#include "ClassPlatform.h"
 
-enum class BallMovement
-{
-	down, up, downRigth, upLeft, downLeft, upRigth
-};
-
-enum class PlatformMovement
-{
-	stop, left, right
-};
-
-BallMovement ballMove;
-PlatformMovement enemyPlatformMove;
-
-void GetKeyboardCommands() //player move
+void Platform::GetKeyboardCommands() //player move
 {
 	if (_kbhit())
 	{
 		switch (_getch())
 		{
 		case 'a':
-			playerPlatformX--;
+			playerDirection = PlatformDirection::left;
 			break;
 		case 'd':
-			playerPlatformX++;
+			playerDirection = PlatformDirection::right;
 			break;
 		}
 	}
 }
 
-void EnemyMovementDescription()
+void Platform::MovementDescription(PlatformDirection movement)
 {
-	switch (enemyPlatformMove)
+	switch (movement)
 	{
-	case PlatformMovement::left:
-		enemyPlatformX--;
+	case PlatformDirection::left:
+		x--;
 		break;
-	case PlatformMovement::right:
-		enemyPlatformX++;
+	case PlatformDirection::right:
+		x++;
 		break;
 	}
 }
 
-void BallMovementDescription()
+void Ball::MovementDescription()
 {
-	switch (ballMove)
+	switch (ballDirection)
 	{
-	case BallMovement::down:
-		ballY++;
+	case BallDirection::down:
+		y++;
 		break;
-	case BallMovement::up:
-		ballY--;
+	case BallDirection::up:
+		y--;
 		break;
-	case BallMovement::upLeft:
-		ballX--;
-		ballY--;
+	case BallDirection::upLeft:
+		x--;
+		y--;
 		break;
-	case BallMovement::upRigth:
-		ballX++;
-		ballY--;
+	case BallDirection::upRigth:
+		x++;
+		y--;
 		break;
-	case BallMovement::downLeft:
-		ballX--;
-		ballY++;
+	case BallDirection::downLeft:
+		x--;
+		y++;
 		break;
-	case BallMovement::downRigth:
-		ballX++;
-		ballY++;
+	case BallDirection::downRigth:
+		x++;
+		y++;
 		break;
 	}
 }
