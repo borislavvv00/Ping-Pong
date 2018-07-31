@@ -1,9 +1,31 @@
 #pragma once
 #ifndef GameSetUp
+#include <iostream>
 #include <Windows.h>
-#include "ClassMap.h"
-#include "ClassBall.h"
-#include "PlatformFunctions.h"
+#include <conio.h>
+#define WIDTH 40
+#define HIGH 20
+
+using namespace std;
+
+bool isGameOver = false;
+bool ballTrajectory;//0-hit by enemy; 1-hit by player
+int playerScore = 0;
+int enemyScore = 0;
+
+enum class BallDirection
+{
+	down, up, downRigth, upLeft, downLeft, upRigth
+};
+
+enum class PlatformDirection
+{
+	stop, left, right
+};
+
+BallDirection ballDirection;
+PlatformDirection enemyDirection;
+PlatformDirection playerDirection;
 
 void ClearScreen()
 {
@@ -12,19 +34,5 @@ void ClearScreen()
 	cursorPosition.Y = 0;
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), cursorPosition);
 }
-
-bool gameOver = false;
-bool ballTrajectory;//0-hit by enemy; 1-hit by player
-Platform enemyPlatform;
-Platform playerPlatform;
-Ball ball;
-int playerScore = 0;
-int enemyScore = 0;
-int enemyPlatformX = WIDTH / 2 - 2;
-int enemyPlatformY = 3;
-int playerPlatformX = WIDTH / 2 - 2;
-int playerPlatformY = HIGH - 3;
-int ballX = WIDTH / 2;
-int ballY = HIGH / 2;
 
 #endif // !GameSetUp
