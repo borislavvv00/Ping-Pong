@@ -1,25 +1,32 @@
-#include <iostream>
 #include "MapFunctions.h"
 #include "GameMovement.h"
 #include "GameRules.h"
 
-using namespace std;
-
 int main()
 {
 	Map map;
-	while (gameOver == false)
+	playerPlatform.SetCoordinates(WIDTH / 2 - 2, HIGH - 3, playerDirection);
+	enemyPlatform.SetCoordinates(WIDTH / 2 - 2, 3, enemyDirection);
+	ball.SetCoordinates();
+
+	while (isGameOver == false)
 	{
-		BallMovementDescription();
-		EnemyMovementDescription();
-		enemyPlatform.EnemyPlatformMoving();
-		GetKeyboardCommands();
-		ball.BallReset();
-		ball.BallTouchingPlayerPlatform();
-		ball.BallTouchingEnemyPlatform();
-		ball.BallTouchingTheWall();
-		playerPlatform.PlatformTouchingTheWall();
+		playerPlatform.MovementDescription(playerDirection);
+		playerPlatform.GetKeyboardCommands();
+		playerPlatform.TouchingTheWall(playerDirection);
+
+		enemyPlatform.MovementDescription(enemyDirection);
+		enemyPlatform.EnemyPlatformMoveLogic();
+		enemyPlatform.TouchingTheWall(enemyDirection);
+
+		ball.MovementDescription();
+		ball.TouchingPlayerPlatform();
+		ball.TouchingEnemyPlatform();
+		ball.TouchingTheWall();
+
 		map.BuildingMap();
+		map.Reset();
+
 		ClearScreen();
 		Sleep(100);
 	}
