@@ -10,8 +10,6 @@ using namespace std;
 
 bool isGameOver = false;
 bool ballTrajectory;//0-hit by enemy; 1-hit by player
-int playerScore = 0;
-int enemyScore = 0;
 
 enum class BallDirection
 {
