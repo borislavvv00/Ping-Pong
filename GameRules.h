@@ -58,7 +58,7 @@ void Ball::ChooseDirection(int dir1, int dir2)
 
 void Ball::TouchingTheWall()
 {
-	switch (ballTrajectory)
+	switch (ballTrajectory.to_ulong())
 	{
 	case 0:
 		ChooseDirection(2, 4);
