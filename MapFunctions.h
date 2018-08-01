@@ -38,7 +38,7 @@ void Map::BuildingMap()
 			else if (i == ball.y && j == ball.x)
 			{
 				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14);
-				cout << ball.ballSign;											//ball position
+				cout << ball.ballSign;	//ball position
 				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
 			}
 			else if ((i == playerPlatform.y || i == enemyPlatform.y) && (j >= playerPlatform.x && j <= playerPlatform.x + playerPlatform.platformWidth - 1))
